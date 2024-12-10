@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Update Note</h1>
+<form method="POST" action="/notes/{{ note.id }}/update/">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="{{ note.title }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="content" class="form-label">Content</label>
+        <textarea class="form-control" id="content" name="content" rows="4" required>{{ note.content }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select class="form-select" id="category" name="category" required>
+            {% for category in categories %}
+            <option value="{{ category.id }}" {% if category.id == note.category.id %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+<!-- Add a back link for better navigation -->
+<a href="/notes/" class="btn btn-link mt-3">Back to Notes</a>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Notes</h1>
+    <a href="/notes/create/" class="btn btn-primary">Create New Note</a>
+</div>
+
+{% if notes %}
+<div class="row">
+    {% for note in notes %}
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ note.title }}</h5>
+                <p class="card-text text-muted">{{ note.category.name|default:"No Category" }}</p>
+                <a href="/notes/{{ note.id }}/" class="btn btn-sm btn-outline-primary">View</a>
+                <a href="/notes/{{ note.id }}/update/" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteNote('{{ note.id }}')">Delete</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-center mt-4">No notes available.</p>
+{% endif %}
+
+<script>
+    const csrfToken = "{{ csrf_token }}";
+
+    function deleteNote(noteId) {
+        if (confirm('Are you sure you want to delete this note?')) {
+            axios.post(`/notes/${noteId}/delete/`, {}, {
+                headers: {
+                    'X-CSRFToken': csrfToken
+                }
+            }).then(response => {
+                alert('Note deleted successfully.');
+                window.location.reload();
+            }).catch(error => {
+                alert('Error deleting note.');
+            });
+        }
+    }
+</script>
+{% endblock %}

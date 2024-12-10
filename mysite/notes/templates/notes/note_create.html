@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Create Note</h1>
+<form method="POST" action="/notes/create/">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+    </div>
+    <div class="mb-3">
+        <label for="content" class="form-label">Content</label>
+        <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select class="form-select" id="category" name="category" required>
+            <option value="" disabled selected>-- Select a Category --</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+<!-- Add a back link for better navigation -->
+<a href="/notes/" class="btn btn-link mt-3">Back to Notes</a>
+{% endblock %}
